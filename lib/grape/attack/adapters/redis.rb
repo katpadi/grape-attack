@@ -8,7 +8,7 @@ module Grape
         attr_reader :broker
 
         def initialize
-          @broker = ::Redis::Namespace.new("grape-attack:#{env}:thottle", redis: ::Redis.new(url: url))
+          @broker = ::Redis::Namespace.new("grape-attack:#{env}:throttle", redis: ::Redis.new(url: url))
         end
 
         def get(key)
@@ -52,6 +52,7 @@ module Grape
         end
 
         def url
+          return ::Rails.application.redis_host if ::Rails.application.redis_host.present?
           ENV['REDIS_URL'] || 'redis://localhost:6379/0'
         end
 
